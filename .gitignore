@@ -118,3 +118,12 @@ dist
 .pnp.*
 
 
+/replit
+db.json
+venv/
+*.pyc
+__pycache__/
+.replit
+poetry.lock
+pyproject.toml
+replit.nix

@@ -21,6 +21,7 @@ from src.utils import get_role_and_content
 from src.service.youtube import Youtube, YoutubeTranscriptReader
 from src.service.website import Website, WebsiteReader
 from src.mongodb import mongodb
+from src.history import save_message
 
 load_dotenv('.env')
 my_secret = os.environ['OpenAI API Token']
@@ -155,8 +156,8 @@ def handle_text_message(event):
     else:
       msg = TextMessage(text=str(e))
   logger.info(f'{user_id}: [{os.getenv("OPENAI_MODEL_ENGINE")}]{msg.text}')
-  line_bot_api.reply_message(
-    ReplyMessageRequest(reply_token=event.reply_token, messages=[msg]))
+  line_bot_api.reply_message(ReplyMessageRequest(reply_token=event.reply_token, messages=[msg]))
+  save_message(os.getenv("OPENAI_MODEL_ENGINE"), user_id, text, msg.text)
 
 
 @handler.add(MessageEvent, message=AudioMessage)
@@ -195,8 +196,7 @@ def handle_audio_message(event):
     else:
       msg = TextMessage(text=str(e))
   os.remove(input_audio_path)
-  line_bot_api.reply_message(
-    ReplyMessageRequest(reply_token=event.reply_token, messages=[msg]))
+  line_bot_api.reply_message(ReplyMessageRequest(event.reply_token, msg))
 
 
 @app.route("/", methods=['GET'])
