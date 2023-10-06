@@ -8,3 +8,4 @@ pymongo==4.3.3
 gspread
 google-auth
 pytz
+dotenv

@@ -121,10 +121,13 @@ dist
 /replit
 db.json
 venv/
+.pythonlibs/
 *.pyc
 __pycache__/
+# */__pycache__
 .replit
 poetry.lock
 pyproject.toml
 replit.nix
 sheet-linebot-6d33dca9428e.json
+# src/service/__pycache__/
