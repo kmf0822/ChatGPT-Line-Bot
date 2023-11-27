@@ -1,27 +1,30 @@
 import os
-from dotenv import load_dotenv
-from flask import Flask, request, abort
-# from linebot import (LineBotApi, WebhookHandler)
-# from linebot.exceptions import (InvalidSignatureError)
-# from linebot.models import (MessageEvent, TextMessage, TextSendMessage,
-#                             ImageSendMessage, AudioMessage)
-from linebot.v3 import (WebhookHandler)
-from linebot.v3.exceptions import (InvalidSignatureError)
-from linebot.v3.messaging import (Configuration, ApiClient, MessagingApi,
-                                  ReplyMessageRequest, TextMessage,
-                                  ImageMessage, AudioMessage)
-from linebot.v3.webhooks import (MessageEvent, TextMessageContent)
 import uuid
 
-from src.models import OpenAIModel
-from src.memory import Memory
-from src.logger import logger
-from src.storage import Storage, FileStorage, MongoStorage
-from src.utils import get_role_and_content
-from src.service.youtube import Youtube, YoutubeTranscriptReader
-from src.service.website import Website, WebsiteReader
-from src.mongodb import mongodb
+from dotenv import load_dotenv
+from flask import Flask, abort, request
+from linebot.v3 import WebhookHandler
+from linebot.v3.exceptions import InvalidSignatureError
+from linebot.v3.messaging import (
+    ApiClient,
+    AudioMessage,
+    Configuration,
+    ImageMessage,
+    MessagingApi,
+    ReplyMessageRequest,
+    TextMessage,
+)
+from linebot.v3.webhooks import MessageEvent, TextMessageContent
+
 from src.history import save_message
+from src.logger import logger
+from src.memory import Memory
+from src.models import OpenAIModel
+from src.mongodb import mongodb
+from src.service.website import Website, WebsiteReader
+from src.service.youtube import Youtube, YoutubeTranscriptReader
+from src.storage import FileStorage, MongoStorage, Storage
+from src.utils import get_role_and_content
 
 load_dotenv('.env')
 my_secret = os.environ['OpenAI API Token']
@@ -74,6 +77,7 @@ def handle_text_message(event):
       model = OpenAIModel(api_key=api_key)
       is_successful, _, _ = model.check_token_valid()
       if not is_successful:
+        # pass
         raise ValueError('Invalid API token')
       model_management[user_id] = model
       storage.save({user_id: api_key})

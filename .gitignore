@@ -124,7 +124,6 @@ venv/
 .pythonlibs/
 *.pyc
 __pycache__/
-# */__pycache__
 .replit
 poetry.lock
 pyproject.toml
